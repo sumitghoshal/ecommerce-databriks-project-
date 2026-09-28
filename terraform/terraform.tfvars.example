@@ -1,0 +1,18 @@
+# Copy to terraform.tfvars and fill in. NEVER commit terraform.tfvars.
+aws_region    = "ap-south-1"
+environment   = "dev"
+project_name  = "ecommerce-devops"
+
+# Must be globally unique — use your initials + a number
+bucket_suffix = "CHANGEME01"
+
+# Your public IP (get it with: curl -s https://checkip.amazonaws.com)
+my_ip_cidr = "203.0.113.4/32"
+
+alert_email = "you@example.com"
+
+# MongoDB Atlas connection string (free tier is fine)
+mongo_uri = "mongodb+srv://user:pass@cluster.mongodb.net/ecommerce"
+
+# Strong password: 8-64 chars, upper + lower + number
+redshift_admin_password = "ChangeMe_Str0ngPass"

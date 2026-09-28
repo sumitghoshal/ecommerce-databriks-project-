@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopStream — E-Commerce Platform</title>
+  <meta name="description" content="ShopStream — a cloud-native e-commerce demo on AWS ECS, Kinesis, Glue and Redshift.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛍️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===================== Header ===================== -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#top" class="logo">
+        <span class="logo-mark">🛍️</span>
+        <span class="logo-text">Shop<em>Stream</em></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#order">Order</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#orders-section">Recent Orders</a>
+      </nav>
+      <span id="health-badge" class="badge" title="Backend API status">checking…</span>
+    </div>
+  </header>
+
+  <!-- ===================== Hero ===================== -->
+  <section class="hero" id="top">
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="eyebrow">Live on AWS ECS Fargate</span>
+        <h1>Real-time commerce,<br>built for scale.</h1>
+        <p class="hero-sub">
+          Every order here flows straight into a real data pipeline —
+          Kinesis&nbsp;→&nbsp;Firehose&nbsp;→&nbsp;S3&nbsp;→&nbsp;Glue&nbsp;→&nbsp;Redshift —
+          so you can watch analytics build in near real time.
+        </p>
+        <div class="hero-actions">
+          <a href="#order" class="btn btn-primary">Place a test order</a>
+          <a href="#orders-section" class="btn btn-ghost-light">View live orders</a>
+        </div>
+      </div>
+      <div class="hero-stats" aria-hidden="true">
+        <div class="stat-card">
+          <span class="stat-icon">⚡</span>
+          <span class="stat-value">&lt;100ms</span>
+          <span class="stat-label">API response</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📦</span>
+          <span class="stat-value">Auto-scaling</span>
+          <span class="stat-label">2–6 Fargate tasks</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">📊</span>
+          <span class="stat-value">Streaming</span>
+          <span class="stat-label">Kinesis → Redshift</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap main-grid">
+
+    <!-- ===================== Order form ===================== -->
+    <section class="panel form-panel" id="order">
+      <div class="panel-heading">
+        <h2><span class="panel-icon">🧾</span> Place an Order</h2>
+        <p class="panel-sub">Submitted orders are written to MongoDB and emitted to Kinesis.</p>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          <span>Order ID</span>
+          <input type="text" id="order-id" placeholder="ORD-1001" autocomplete="off">
+        </label>
+        <label>
+          <span>Customer ID</span>
+          <input type="number" id="customer-id" placeholder="42" min="1">
+        </label>
+        <label>
+          <span>Product ID</span>
+          <input type="number" id="product-id" placeholder="7" min="1">
+        </label>
+        <label>
+          <span>Quantity</span>
+          <input type="number" id="quantity" value="1" min="1">
+        </label>
+        <label class="span-2">
+          <span>Amount (USD)</span>
+          <input type="number" id="amount" step="0.01" placeholder="99.50" min="0">
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button id="submit-order" class="btn btn-primary btn-block">
+          <span class="btn-label">Submit Order</span>
+        </button>
+        <p id="form-status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <!-- ===================== Catalog (static showcase) ===================== -->
+    <section class="panel catalog-panel" id="catalog">
+      <div class="panel-heading">
+        <h2><span class="panel-icon">🗂️</span> Sample Catalog</h2>
+        <p class="panel-sub">Use any of these Product IDs in the form to the left.</p>
+      </div>
+      <div class="catalog-grid">
+        <article class="product-card">
+          <span class="product-emoji">🎧</span>
+          <h3>Wireless Headphones</h3>
+          <span class="product-meta">Product ID 7 · Electronics</span>
+          <span class="product-price">$89.99</span>
+        </article>
+        <article class="product-card">
+          <span class="product-emoji">👟</span>
+          <h3>Running Shoes</h3>
+          <span class="product-meta">Product ID 22 · Sports</span>
+          <span class="product-price">$64.50</span>
+        </article>
+        <article class="product-card">
+          <span class="product-emoji">☕</span>
+          <h3>Ceramic Pour-Over Set</h3>
+          <span class="product-meta">Product ID 35 · Home</span>
+          <span class="product-price">$34.00</span>
+        </article>
+        <article class="product-card">
+          <span class="product-emoji">📚</span>
+          <h3>Cloud Architecture Guide</h3>
+          <span class="product-meta">Product ID 51 · Books</span>
+          <span class="product-price">$28.75</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== Recent orders ===================== -->
+    <section class="panel orders-panel" id="orders-section">
+      <div class="panel-heading panel-heading-row">
+        <div>
+          <h2><span class="panel-icon">📋</span> Recent Orders</h2>
+          <p class="panel-sub">Pulled live from <code>/api/orders</code>.</p>
+        </div>
+        <button id="refresh" class="btn btn-ghost">
+          <span class="refresh-icon" aria-hidden="true">↻</span> Refresh
+        </button>
+      </div>
+
+      <div class="orders-table">
+        <div class="orders-row orders-head" aria-hidden="true">
+          <span>Order</span>
+          <span>Customer</span>
+          <span>Product</span>
+          <span>Qty</span>
+          <span class="align-right">Amount</span>
+        </div>
+        <div id="orders" class="orders-body">
+          <p class="muted loading-row">Loading orders…</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== Footer ===================== -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>Frontend (nginx) → ALB <code>/api/*</code> → Backend (Flask) → MongoDB + Kinesis</p>
+      <p class="muted">Built on AWS ECS Fargate · Deployed via Jenkins CI/CD</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
